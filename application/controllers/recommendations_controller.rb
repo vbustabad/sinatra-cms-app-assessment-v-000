@@ -41,7 +41,7 @@ class RecommendationsController < ApplicationController
     @recommendation = Recommendation.find(params["id"])
 
     if logged_in?
-      @user = User.find_by(id: session[:user_id])
+      @user = User.find_by(current_user.id)
       erb :'/recommendations/show_recommendation'
     else
       redirect to("/login")

@@ -32,6 +32,10 @@ class ApplicationController < Sinatra::Base
     if params["username"].empty? || params["email"].empty? || params["password"].empty?
       flash[:message] = "*Please ensure all fields are completed. A username, email and password is required for registration."
       redirect to("/signup")
+    elsif User.all.select do |user|
+        user.username == params["username"]
+      end
+      redirect to("/login")
     else
       @user = User.create(username: params["username"], email: params["email"], password: params["password"])
       session[:user_id] = @user.id
