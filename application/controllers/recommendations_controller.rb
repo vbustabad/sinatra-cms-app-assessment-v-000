@@ -41,7 +41,7 @@ class RecommendationsController < ApplicationController
     @recommendation = Recommendation.find(params["id"])
 
     if logged_in?
-      @user = User.find_by(current_user.id)
+      @user = User.find_by(id: current_user.id)
       erb :'/recommendations/show_recommendation'
     else
       redirect to("/login")
@@ -52,7 +52,7 @@ class RecommendationsController < ApplicationController
 
     if logged_in?
       @recommendation = Recommendation.find(params[:id])
-      @user = User.find_by(id: session[:user_id])
+      @user = User.find_by(id: current_user.id)
       if @recommendation && @recommendation.user_id == @user.id
         erb :'/recommendations/edit_recommendation'
       else
@@ -65,7 +65,7 @@ class RecommendationsController < ApplicationController
 
   patch '/recommendations/:id' do
     @recommendation = Recommendation.find(params[:id])
-    @user = User.find_by(id: session[:user_id])
+    @user = User.find_by(id: current_user.id)
 
     if !params[:content].empty? && @recommendation.user_id == @user.id
       @recommendation.content = params[:content]
@@ -81,7 +81,7 @@ class RecommendationsController < ApplicationController
 
   delete '/recommendations/:id/delete' do
     @recommendation = Recommendation.find(params[:id])
-    @user = User.find_by(id: session[:user_id])
+    @user = User.find_by(id: current_user.id)
 
     if logged_in? && @recommendation.user_id == @user.id
       @recommendation.destroy
